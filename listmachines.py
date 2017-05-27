@@ -14,11 +14,15 @@ strings = subprocess.check_output(["VBoxManage", "list", "vms"])
 #print(strings)
 #print type(strings)
 for line in strings.splitlines():
+    indexoffirstbracket = line.index('{')
+    indexofsecondbracket = line.index('}')
+    uuid = line[indexoffirstbracket+1:indexofsecondbracket]
+    print uuid
     line = line[1:]
     indexofsecondquote = line.index('\"')
-    line = line[:indexofsecondquote]
+    name = line[:indexofsecondquote]
     vmarray.append(line)
-    print line
+    print name
 
 menuselect = raw_input("Which machine do you want to run ?(enter number)")
 menuselect = int(menuselect)
