@@ -46,13 +46,23 @@ class Windows(Machine):
 
 
     def copyto(self):
-        subprocess.call(["VBoxManage", "startvm", self.name])
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "copyto", "/home/freddie/pythonbashvbox/testcopy.txt", "--target-directory", "c://test", "--username", "pseudonym", "--password", "shifty"])
 
     def copyfrom(self):
-        subprocess.call(["VBoxManage", "startvm", self.name])
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://test", "--username", "pseudonym", "--password", "shifty"])
 
     def createdir(self):
         subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://test", "--username", "pseudonym", "--password", "shifty"])
+
+    def runexe(self):
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "copyto", "/home/freddie/pythonbashvbox/testcopy.txt", "--target-directory", "c://test", "--username", "pseudonym", "--password", "shifty"])
+#vboxmanage guestcontrol "windowsxpclonedrun --exe "C:/calc.exe"
+# --username "pseudonym" --password "shifty" --verbose
+
+
+
+
+
 #vboxmanage guestcontrol windowsxpcloned createdir "c://test2" --username pseudo --password shifty
 #vboxmanage guestcontrol windowsxpcloned createdir "c://test2" --username pseudonym --password shifty
 
@@ -107,6 +117,9 @@ vmarray[menuselect-1].startvm()
 time.sleep(90)
 
 vmarray[menuselect-1].createdir()
+time.sleep(5)
+vmarray[menuselect-1].copyto()
+print "copied"
 time.sleep(30)
 vmarray[menuselect-1].stopvm()
 
