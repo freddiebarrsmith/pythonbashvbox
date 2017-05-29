@@ -51,11 +51,24 @@ class Windows(Machine):
     def copyfrom(self):
         subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://test", "--username", "pseudonym", "--password", "shifty"])
 
-    def createdir(self):
-        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://test", "--username", "pseudonym", "--password", "shifty"])
+    def createmalwaredir(self):
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://malware", "--username", "pseudonym", "--password", "shifty"])
+
+    def createpcapsdir(self):
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://pcaps", "--username", "pseudonym", "--password", "shifty"])
 
     def runexe(self):
-        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "copyto", "/home/freddie/pythonbashvbox/testcopy.txt", "--target-directory", "c://test", "--username", "pseudonym", "--password", "shifty"])
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "run", "--exe", "C:/calc.exe", "--wait-stdout", "--username", "pseudonym", "--password", "shifty"])
+
+    def copypacketsniffer(self):
+
+    def runpacketsniffer(self):
+
+    def executemalware(self):
+    #vboxmanage guestcontrol "windowsxpcloned" run --exe "C:/calc.exe"
+    ## --wait-stdout --username "pseudonym" --password "shifty" --verbose
+
+
 #vboxmanage guestcontrol "windowsxpclonedrun --exe "C:/calc.exe"
 # --username "pseudonym" --password "shifty" --verbose
 
@@ -105,25 +118,27 @@ menuselect = int(menuselect)
 vmarray[menuselect-1].printuuid()
 vmarray[menuselect-1].printuuid()
 
+vmarray[menuselect-1].createmalwaredir()
+vmarray[menuselect-1].createpcapsdir()
 
-
+vmarray[menuselect-1].runexe()
 #
-vmarray[menuselect-1].deleteclone()
+#vmarray[menuselect-1].deleteclone()
 
-vmarray[menuselect-1].clonevm()
+#vmarray[menuselect-1].clonevm()
 
 time.sleep(10)
-vmarray[menuselect-1].startvm()
+#vmarray[menuselect-1].startvm()
 time.sleep(90)
 
-vmarray[menuselect-1].createdir()
+#vmarray[menuselect-1].createdir()
 time.sleep(5)
-vmarray[menuselect-1].copyto()
+#vmarray[menuselect-1].copyto()
 print "copied"
 time.sleep(30)
-vmarray[menuselect-1].stopvm()
+#vmarray[menuselect-1].stopvm()
 
-vmarray[menuselect-1].deleteclone()
+#vmarray[menuselect-1].deleteclone()
 
 
 #vmarray[menuselect-1].stopvm()
