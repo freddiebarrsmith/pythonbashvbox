@@ -2,7 +2,11 @@ import subprocess
 import os
 import re
 import time
-
+###prerequisites
+###need to install guest additions on each host
+###need to
+###install python 2 on each target host
+###run gpedit.msc and change security settings
 #class list(object):
 
 class Machine(object):
@@ -11,6 +15,7 @@ class Machine(object):
         self.name = name
         self.uuid = uuid
         self.clonename = name + str("cloned")
+        #add self.malwarename
 
     def printuuid(self):
         print self.uuid
@@ -57,14 +62,30 @@ class Windows(Machine):
     def createpcapsdir(self):
         subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "createdir", "c://pcaps", "--username", "pseudonym", "--password", "shifty"])
 
+
+#    def runexe(self):
+#        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "run", "--exe", "C://malware/sample.exe", "--wait-stdout", "--username", "pseudonym", "--password", "shifty"])
+
     def runexe(self):
-        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "run", "--exe", "C:/calc.exe", "--wait-stdout", "--username", "pseudonym", "--password", "shifty"])
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "run", "--exe", "C://malware/calc.exe", "--wait-stdout", "--username", "pseudonym", "--password", "shifty"])
 
-    def copypacketsniffer(self):
 
+    def copymalware(self):
+        subprocess.call(["vboxmanage", "guestcontrol", self.clonename, "copyto", "/home/freddie/malware/calc.exe", "--target-directory", "c://malware", "--username", "pseudonym", "--password", "shifty"])
+
+#https://www.virtualbox.org/wiki/Network_tips
+#
+# VBoxManage modifyvm [your-vm] --nictrace[adapter-number] on --nictracefile[adapter-number] file.pcap
+    def listnics(self):
+        print name
     def runpacketsniffer(self):
+#        print name
+        malwarename = "malware"
+        pcapname = str(self.clonename) + str(malwarename) + str(".pcap")
+        subprocess.call(["VBoxManage", "modifyvm", self.clonename, "--nictrace1", "on", "--nictracefile1", pcapname])
 
     def executemalware(self):
+        print name
     #vboxmanage guestcontrol "windowsxpcloned" run --exe "C:/calc.exe"
     ## --wait-stdout --username "pseudonym" --password "shifty" --verbose
 
@@ -118,27 +139,35 @@ menuselect = int(menuselect)
 vmarray[menuselect-1].printuuid()
 vmarray[menuselect-1].printuuid()
 
-vmarray[menuselect-1].createmalwaredir()
-vmarray[menuselect-1].createpcapsdir()
 
-vmarray[menuselect-1].runexe()
+
+#vmarray[menuselect-1].runexe()
 #
 #vmarray[menuselect-1].deleteclone()
+#vmarray[menuselect-1].deleteclone()
 
-#vmarray[menuselect-1].clonevm()
+vmarray[menuselect-1].clonevm()
+time.sleep(5)
+
+vmarray[menuselect-1].runpacketsniffer()
 
 time.sleep(10)
-#vmarray[menuselect-1].startvm()
-time.sleep(90)
+vmarray[menuselect-1].startvm()
+time.sleep(60)
+vmarray[menuselect-1].createmalwaredir()
+time.sleep(5)
 
-#vmarray[menuselect-1].createdir()
+vmarray[menuselect-1].copymalware()
+time.sleep(5)
+
+vmarray[menuselect-1].runexe()
 time.sleep(5)
 #vmarray[menuselect-1].copyto()
 print "copied"
 time.sleep(30)
 #vmarray[menuselect-1].stopvm()
 
-#vmarray[menuselect-1].deleteclone()
+#
 
 
 #vmarray[menuselect-1].stopvm()
